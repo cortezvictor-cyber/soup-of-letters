@@ -1,7 +1,5 @@
 package com.example.demo1;
 
-
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -34,20 +32,22 @@ public class HelloApplication extends Application {
             root.setStyle("-fx-background-color: #f0f4f8;"); // Color de fondo de la ventana
 
             // Título y Área de texto para mostrar la sopa alineada
-            Label lblTitulo = new Label("Cuadrícula de la Sopa de Letras:");
+            Label lblTitulo = new Label("SOUP OF LETTERS:");
             lblTitulo.setStyle("-fx-text-fill: #2c3e50; -fx-font-weight: bold;");
 
-            StringBuilder sb = new StringBuilder("    ");
+            // --- CABECERA DE COLUMNAS (Alineada para 1 y 2 dígitos) ---
+            StringBuilder sb = new StringBuilder("     ");
             for (int j = 0; j < sopa.getColumnas(); j++) {
-                sb.append(j).append(" ");
+                sb.append(String.format("%-2d", j)); // Cada número ocupa 2 espacios fijos
             }
             sb.append("\n");
 
+            // --- FILAS DE LA MATRIZ ---
             String[][] m = sopa.getMatriz();
             for (int i = 0; i < sopa.getFilas(); i++) {
-                sb.append(i).append(" | ");
+                sb.append(i < 10 ? i + "   | " : i + "  | ");
                 for (int j = 0; j < sopa.getColumnas(); j++) {
-                    sb.append(m[i][j]).append(" ");
+                    sb.append(String.format("%-2s", m[i][j])); // Cada celda ocupa 2 espacios fijos
                 }
                 sb.append("\n");
             }
@@ -55,9 +55,9 @@ public class HelloApplication extends Application {
             TextArea txtSopa = new TextArea(sb.toString());
             txtSopa.setEditable(false);
 
-
-            txtSopa.setStyle("-fx-font-family: monospace; -fx-font-size: 14px; -fx-control-inner-background: #ffffff;");
-            txtSopa.setPrefHeight(180);
+            // Fuente monoespaciada y tamaño adecuado para matrices grandes
+            txtSopa.setStyle("-fx-font-family: monospace; -fx-font-size: 13px; -fx-control-inner-background: #ffffff;");
+            txtSopa.setPrefHeight(350);
 
             // Controles de búsqueda en la misma ventana
             Label lblBuscar = new Label("Ingrese la palabra a buscar:");
@@ -84,16 +84,15 @@ public class HelloApplication extends Application {
                 }
             });
 
-            // Agregar los elementos
+            // Agregar los elementos al contenedor principal
             root.getChildren().addAll(lblTitulo, txtSopa, lblBuscar, txtPalabra, btnBuscar, lblResultado);
 
-
-            Scene scene = new Scene(root, 450, 480);
+            // Configurar escena y ventana
+            Scene scene = new Scene(root, 650, 650);
             stage.setScene(scene);
             stage.show();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error al cargar el archivo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
@@ -101,6 +100,5 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args) {
         launch();
-
     }
 }

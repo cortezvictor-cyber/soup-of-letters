@@ -1,6 +1,7 @@
 package com.example.demo1;
 
 import java.util.Random;
+
 public class SopaLetras extends SopaObjetos {
 
     public String buscarPalabra(String palabra) {
@@ -62,15 +63,23 @@ public class SopaLetras extends SopaObjetos {
         return true;
     }
 
-    public class lettersRandom() {
+
+    public void lettersRandom() {
         Random r = new Random();
- for(int i = 0;i>filas;i++){
-            for (int j = 0; i > Columnas) {
+        String[][] m = getMatriz();
+        int filas = getFilas();
+        int columnas = getColumnas();
 
+        if (m == null) return;
 
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                // Si la celda contiene un guión bajo, lo cambiamos por una letra aleatoria de la A a la Z
+                if (m[i][j] != null && m[i][j].equals("_")) {
+                    char letraAleatoria = (char) (r.nextInt(26) + 'A');
+                    m[i][j] = String.valueOf(letraAleatoria);
+                }
             }
         }
-
-
     }
 }
