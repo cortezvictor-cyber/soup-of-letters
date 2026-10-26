@@ -1,5 +1,4 @@
 package com.example.demo1;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -93,19 +92,19 @@ public class SopaObjetos {
         String[][] copia = Arrays.copyOf(matriz, matriz.length);
     }
 
-
+// f(fila donde inicia) c(columna donde empieza) df(como se va moviendo la fila) dc(como se mueve la columna)
     private boolean cabePalabra(int f, int c, int df, int dc, String palabra) {
-        int len = palabra.length();
-        int finF = f + (len - 1) * df;
-        int finC = c + (len - 1) * dc;
+        int len = palabra.length();  //mide la palabra
+        int finF = f + (len - 1) * df; //calcula donde es el fin de la palabra en fila
+        int finC = c + (len - 1) * dc; //y este la columna
 
         if (finF < 0 || finF >= filas || finC < 0 || finC >= columnas) {
             return false;
         }
 
         for (int k = 0; k < len; k++) {
-            int nf = f + k * df;
-            int nc = c + k * dc;
+            int nf = f + k * df; //va indicando el nuevo posicionamiento de la letra de la palabra en la fila
+            int nc = c + k * dc; // en la columna
             String actual = matriz[nf][nc];
             char letra = palabra.charAt(k);
 

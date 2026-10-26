@@ -47,15 +47,15 @@ public class SopaLetras extends SopaObjetos {
 
     private boolean revisarDireccion(String[][] m, int fTotal, int cTotal, int f, int c, int df, int dc, String p) {
         for (int k = 0; k < p.length(); k++) {
-            int nf = f + k * df; // nueva fila
-            int nc = c + k * dc; // nueva columna
+            int nf = f + k * df;
+            int nc = c + k * dc;
 
             // Si se sale de los límites de la matriz, esta dirección no es válida
             if (nf < 0 || nf >= fTotal || nc < 0 || nc >= cTotal) {
                 return false;
             }
 
-            // Si alguna letra no coincide, devolvemos falso
+            // Si alguna letra no cconcuerda, regresamos  falso
             if (!m[nf][nc].equalsIgnoreCase(String.valueOf(p.charAt(k)))) {
                 return false;
             }
@@ -74,7 +74,7 @@ public class SopaLetras extends SopaObjetos {
 
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                // Si la celda contiene un guión bajo, lo cambiamos por una letra aleatoria de la A a la Z
+                // Se ponen letras aleatorias de la a a la z
                 if (m[i][j] != null && m[i][j].equals("_")) {
                     char letraAleatoria = (char) (r.nextInt(26) + 'A');
                     m[i][j] = String.valueOf(letraAleatoria);
