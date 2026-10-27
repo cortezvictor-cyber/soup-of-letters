@@ -2,8 +2,11 @@ package com.example.demo1;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
@@ -16,7 +19,7 @@ public class HelloApplication extends Application {
             SopaLetras sopa = new SopaLetras();
 
             // 1. Pedir el archivo al iniciar
-            String archivo = JOptionPane.showInputDialog(null, "Nombre del archivo de texto (ej. sopa.txt):", "Cargar Sopa", JOptionPane.QUESTION_MESSAGE);
+            String archivo = JOptionPane.showInputDialog(null, "Nombre del archivo de texto", "Cargar Sopa", JOptionPane.QUESTION_MESSAGE);
             if (archivo == null || archivo.trim().isEmpty()) {
                 archivo = "sopa.txt";
             }
@@ -24,56 +27,98 @@ public class HelloApplication extends Application {
             // Cargar archivo
             sopa.cargarArchivo(archivo.trim());
 
-            // 2. Configurar la Ventana Principal de JavaFX
+            // 2. Configurar la Ventana
             stage.setTitle("Buscador de Sopa de Letras");
 
-            VBox root = new VBox(10);
+            VBox root = new VBox(12);
             root.setPadding(new Insets(15));
-            root.setStyle("-fx-background-color: #f0f4f8;"); // Color de fondo de la ventana
+            root.setAlignment(Pos.CENTER); // Centra todos los elementos vertical y horizontalmente en la ventana
+            root.setStyle("-fx-background-color: #f0f4f8;");
 
-            // Título y Área de texto para mostrar la sopa alineada
+            // Título
             Label lblTitulo = new Label("SOUP OF LETTERS:");
             lblTitulo.setStyle("-fx-text-fill: #2c3e50; -fx-font-weight: bold;");
 
-            // --- CABECERA DE COLUMNAS (Alineada para 1 y 2 dígitos) ---
-            StringBuilder sb = new StringBuilder("     ");
-            for (int j = 0; j < sopa.getColumnas(); j++) {
-                sb.append(String.format("%-2d", j)); // Cada número ocupa 2 espacios fijos
-            }
-            sb.append("\n");
+            // --- CREAR LA CUADRÍCULA CON NÚMEROS Y CAJITAS ---
+            GridPane gridSopa = new GridPane();
+            gridSopa.setHgap(3);
+            gridSopa.setVgap(3);
+            gridSopa.setAlignment(Pos.CENTER);
 
-            // --- FILAS DE LA MATRIZ ---
+            int filas = sopa.getFilas();
+            int columnas = sopa.getColumnas();
             String[][] m = sopa.getMatriz();
-            for (int i = 0; i < sopa.getFilas(); i++) {
-                sb.append(i < 10 ? i + "   | " : i + "  | ");
-                for (int j = 0; j < sopa.getColumnas(); j++) {
-                    sb.append(String.format("%-2s", m[i][j])); // Cada celda ocupa 2 espacios fijos
-                }
-                sb.append("\n");
+
+            // 1. Números de las columnas (parte superior)
+            for (int j = 0; j < columnas; j++) {
+                Label lblCol = new Label(String.valueOf(j));
+                lblCol.setMinSize(28, 28);
+                lblCol.setMaxSize(28, 28);
+                lblCol.setStyle("-fx-alignment: center; -fx-font-weight: bold; -fx-text-fill: #7f8c8d; -fx-font-size: 11px;");
+                gridSopa.add(lblCol, j + 1, 0);
             }
 
-            TextArea txtSopa = new TextArea(sb.toString());
-            txtSopa.setEditable(false);
+            // 2. Números de los renglones (parte izquierda)
+            for (int i = 0; i < filas; i++) {
+                Label lblRow = new Label(String.valueOf(i));
+                lblRow.setMinSize(28, 28);
+                lblRow.setMaxSize(28, 28);
+                lblRow.setStyle("-fx-alignment: center; -fx-font-weight: bold; -fx-text-fill: #7f8c8d; -fx-font-size: 11px;");
+                gridSopa.add(lblRow, 0, i + 1);
+            }
 
-            // Fuente monoespaciada y tamaño adecuado para matrices grandes
-            txtSopa.setStyle("-fx-font-family: monospace; -fx-font-size: 13px; -fx-control-inner-background: #ffffff;");
-            txtSopa.setPrefHeight(350);
+            // 3. Cajitas con cada letra de la matriz
+            for (int i = 0; i < filas; i++) {
+                for (int j = 0; j < columnas; j++) {
+                    Label lblCell = new Label(m[i][j] != null ? m[i][j] : " ");
+                    lblCell.setMinSize(28, 28);
+                    lblCell.setMaxSize(28, 28);
+                    lblCell.setStyle("-fx-border-color: #bdc3c7; " +
+                            "-fx-background-color: #ffffff; " +
+                            "-fx-alignment: center; " +
+                            "-fx-font-family: monospace; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-text-fill: #2c3e50;");
 
-            // Controles de búsqueda en la misma ventana
+                    gridSopa.add(lblCell, j + 1, i + 1);
+                }
+            }
+
+            // Contenedor StackPane para obligar a que la sopa de letras quede centrada dentro del ScrollPane
+            StackPane gridContainer = new StackPane(gridSopa);
+            gridContainer.setAlignment(Pos.CENTER);
+            gridContainer.setStyle("-fx-background-color: #ffffff;");
+
+            // ScrollPane configurado para ajustar y centrar la cuadrícula
+            ScrollPane scrollPane = new ScrollPane(gridContainer);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(true);
+            scrollPane.setPrefHeight(350);
+            scrollPane.setStyle("-fx-background: #ffffff; -fx-border-color: #bdc3c7;");
+
+            // Controles de búsqueda
             Label lblBuscar = new Label("Ingrese la palabra a buscar:");
             lblBuscar.setStyle("-fx-text-fill: #2c3e50; -fx-font-weight: bold;");
 
             TextField txtPalabra = new TextField();
-            txtPalabra.setStyle("-fx-background-color: #ffffff; -fx-border-color: #bdc3c7; -fx-padding: 5px;");
+            txtPalabra.setStyle("-fx-background-color: #ffffff; -fx-border-color: #bdc3c7; -fx-padding: 5px; -fx-max-width: 250px;");
 
             Button btnBuscar = new Button("Buscar Palabra");
             btnBuscar.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
+
+            // Botón para guardar en TXT
+            Button btnGuardar = new Button("Guardar Sopa en TXT");
+            btnGuardar.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;");
+
+            btnGuardar.setOnAction(e -> {
+                sopa.guardarSopa();
+            });
 
             Label lblResultado = new Label("Resultado: (Escribe una palabra y presiona buscar)");
             lblResultado.setWrapText(true);
             lblResultado.setStyle("-fx-font-weight: bold; -fx-text-fill: #1a5276;");
 
-            // Acción del botón
+            // Acción del botón buscar
             btnBuscar.setOnAction(e -> {
                 String palabra = txtPalabra.getText();
                 if (palabra != null && !palabra.trim().isEmpty()) {
@@ -84,11 +129,11 @@ public class HelloApplication extends Application {
                 }
             });
 
-            // Agregar los elementos al contenedor principal
-            root.getChildren().addAll(lblTitulo, txtSopa, lblBuscar, txtPalabra, btnBuscar, lblResultado);
+            // Agregar elementos al contenedor principal
+            root.getChildren().addAll(lblTitulo, scrollPane, lblBuscar, txtPalabra, btnBuscar, btnGuardar, lblResultado);
 
             // Configurar escena y ventana
-            Scene scene = new Scene(root, 650, 650);
+            Scene scene = new Scene(root, 650, 700);
             stage.setScene(scene);
             stage.show();
 

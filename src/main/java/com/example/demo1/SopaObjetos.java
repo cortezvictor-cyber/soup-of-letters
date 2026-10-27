@@ -29,7 +29,7 @@ public class SopaObjetos {
             }
         }
         br.close();
-
+//inicializo la matriz
         matriz = (String[][]) Array.newInstance(String.class, filas, columnas);
 
         for (int i = 0; i < filas; i++) {
@@ -79,7 +79,7 @@ public class SopaObjetos {
             }
         }
 
-        // 5. se llenan los espacios vacíos
+        // se llenan los espacios vacíos
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 if (matriz[i][j].equals("_")) {

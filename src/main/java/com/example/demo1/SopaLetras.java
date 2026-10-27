@@ -1,5 +1,6 @@
 package com.example.demo1;
 
+import java.io.PrintWriter;
 import java.util.Random;
 
 public class SopaLetras extends SopaObjetos {
@@ -28,7 +29,7 @@ public class SopaLetras extends SopaObjetos {
                 "Diagonal Arriba-Derecha", "Diagonal Arriba-Izquierda"
         };
 
-        // 1. Recorremos cada celda de la matriz
+        //  Recorremos cada celda de la matriz
         for (int f = 0; f < fTotal; f++) {
             for (int c = 0; c < cTotal; c++) {
                 // 2. Probamos las 8 direcciones desde la celda actual (f, c)
@@ -80,6 +81,32 @@ public class SopaLetras extends SopaObjetos {
                     m[i][j] = String.valueOf(letraAleatoria);
                 }
             }
+        }
+    }
+
+    public void guardarSopa() {
+        try {
+            //permite escribir en el new archivo txt
+            PrintWriter archivo = new PrintWriter("sopa.txt");
+            String[][] m = getMatriz();
+            int filas = getFilas();
+            int columnas = getColumnas();
+
+            if (m == null) return;
+//Escribe renglon por renglon en el archivo
+            for (int i = 0; i < filas; i++) {
+                for (int j = 0; j < columnas; j++) {
+                    archivo.print(m[i][j] + " ");
+                }
+                //hace el salto de linea
+                archivo.println();
+            }
+
+            archivo.close();
+            System.out.println("¡Sopa guardada con éxito en sopa.txt!");
+
+        } catch (Exception e) {
+            System.out.println("Error al guardar: " + e.getMessage());
         }
     }
 }
