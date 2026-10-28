@@ -6,3 +6,7 @@ Opcion
 Control
 Balon
 Futbol
+Estudiantiles
+calidad
+prioridad
+emergencia

@@ -19,7 +19,7 @@ public class HelloApplication extends Application {
         try {
             SopaLetras sopa = new SopaLetras();
 
-            // 1. Pedir el archivo al iniciar
+            //Pedir el archivo al iniciar
             String archivo = JOptionPane.showInputDialog(null, "Nombre del archivo de texto", "Cargar Sopa", JOptionPane.QUESTION_MESSAGE);
             if (archivo == null || archivo.trim().isEmpty()) {
                 archivo = "sopa.txt";
@@ -28,7 +28,7 @@ public class HelloApplication extends Application {
             // Cargar archivo
             sopa.cargarArchivo(archivo.trim());
 
-            // 2. Configurar la Ventana
+            //Configurar la Ventana
             stage.setTitle("Buscador de Sopa de Letras");
 
             VBox root = new VBox(12);
@@ -40,7 +40,7 @@ public class HelloApplication extends Application {
             Label lblTitulo = new Label("SOUP OF LETTERS:");
             lblTitulo.setStyle("-fx-text-fill: #2c3e50; -fx-font-weight: bold;");
 
-            // --- CREAR LA CUADRÍCULA CON NÚMEROS Y CAJITAS ---
+            //CREAR LA CUADRÍCULA CON NÚMEROS Y CAJITAS
             GridPane gridSopa = new GridPane();
             gridSopa.setHgap(3);
             gridSopa.setVgap(3);
@@ -50,7 +50,7 @@ public class HelloApplication extends Application {
             int columnas = sopa.getColumnas();
             String[][] m = sopa.getMatriz();
 
-            // 1. Números de las columnas (parte superior)
+            //  Números de las columnas
             for (int j = 0; j < columnas; j++) {
                 Label lblCol = new Label(String.valueOf(j));
                 lblCol.setMinSize(28, 28);
@@ -59,7 +59,7 @@ public class HelloApplication extends Application {
                 gridSopa.add(lblCol, j + 1, 0);
             }
 
-            // 2. Números de los renglones (parte izquierda)
+            //Números de los renglones (parte izquierda)
             for (int i = 0; i < filas; i++) {
                 Label lblRow = new Label(String.valueOf(i));
                 lblRow.setMinSize(28, 28);
@@ -68,7 +68,7 @@ public class HelloApplication extends Application {
                 gridSopa.add(lblRow, 0, i + 1);
             }
 
-            // 3. Cajitas con cada letra de la matriz
+            //Cajitas con cada letra de la matriz
             for (int i = 0; i < filas; i++) {
                 for (int j = 0; j < columnas; j++) {
                     Label lblCell = new Label(m[i][j] != null ? m[i][j] : " ");
@@ -85,12 +85,12 @@ public class HelloApplication extends Application {
                 }
             }
 
-            // Contenedor StackPane para obligar a que la sopa de letras quede centrada dentro del ScrollPane
+            // Para que quede centrada
             StackPane gridContainer = new StackPane(gridSopa);
             gridContainer.setAlignment(Pos.CENTER);
             gridContainer.setStyle("-fx-background-color: #ffffff;");
 
-            // ScrollPane configurado para ajustar y centrar la cuadrícula
+            //ajustar y centrar la cuadrícula
             ScrollPane scrollPane = new ScrollPane(gridContainer);
             scrollPane.setFitToWidth(true);
             scrollPane.setFitToHeight(true);
@@ -130,7 +130,7 @@ public class HelloApplication extends Application {
                 }
             });
 
-            // Agregar elementos al contenedor principal
+            // Agregar elementos al contenedor
             root.getChildren().addAll(lblTitulo, scrollPane, lblBuscar, txtPalabra, btnBuscar, btnGuardar, lblResultado);
 
             // Configurar escena y ventana
